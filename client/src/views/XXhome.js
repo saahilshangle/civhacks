@@ -1,5 +1,13 @@
 import React from 'react';
 import './../App.css';
+import NavBar from './NavBar'
+
+import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+
+// import { ThemeProvider } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 export default class Home extends React.Component {
 
@@ -46,19 +54,36 @@ export default class Home extends React.Component {
     render() {
         return (
             <div>
-                <h3>Add User to DB</h3>
+                <NavBar/>
+
+    {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+    <CssBaseline />
+
+
+                <h3 className = "schedule">Schedule A Meeting</h3>
                 <form onSubmit = {this.onSubmit}>
-                    <label>Username</label>
+                    <label>Who would you like to meet with?</label>
                     <input type="text"
                             required
                             value={this.state.username}
                             onChange={this.onChangeUsername}
                     />
-                    <input type="submit" value="Create User"  />
+                    <input type="submit" value="Generate Possible Meetings"  />
                 </form>
-                <h3>Existing Users in DB</h3>
-                <button onClick={this.onSearch}>Search</button>
-                <p>{this.state.usernames}</p>
+
+                <Container maxWidth="sm">
+                    <Box my={4}>
+                        <Typography variant="h4" component="h1" gutterBottom>
+                            Schedule A Meeting
+                        </Typography>
+                    </Box>
+                </Container>
+
+
+                <h3>Logout</h3>
+                <a href = "login">
+                <button id = "loginButton">Logout</button>
+                </a>
             </div>
         );
     }

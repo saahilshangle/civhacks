@@ -3,17 +3,22 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { Redirect, BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Main from "./main";
+
+
 
 // Additional views
-import Home from './views/home.js';
+// import Login from './views/login.js';
+// import Home from './views/XXhome.js';
 
 ReactDOM.render(
-  <Router>
-    <Switch>
-      <Route exact path='/'><Redirect to='/home' /></Route>
-      <Route exact path='/home' component={Home} />
-    </Switch>
-  </Router>,
+  // <Router>
+  //   <Switch>
+  //     <Route exact path='/'><Redirect to='/home' /></Route>
+  //     <Route exact path='/home' component={Home} />
+  //   </Switch>
+  // </Router>,
+  <Main />,
   document.getElementById('root')
 );
 

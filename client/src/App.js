@@ -1,16 +1,19 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 //import 'bootstrap/dist/css/boostrap.min.css'
+import NavBar from './views/NavBar'
+import React, { Component } from 'react'
+import NavBar from './components/NavBar'
 
-function App() {
-  return (
-    <header>
-      <img src={logo} className="App-logo" alt="logo" />
-      <div className="container">
-        Hello World!
+
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <NavBar />
       </div>
-    </header>
-  );
+    )
+  }
 }
 
-export default App;
+export default App
