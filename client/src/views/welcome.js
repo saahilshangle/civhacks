@@ -44,22 +44,29 @@ class Welcome extends Component {
     render() {
         return (
             <div>
-                <h2 className = "schedule">Schedule A Meeting</h2>
+                <h2 className = "schedule">Schedule A Meeting:</h2>
+                <br />
+                <br />
+                <div className = "formContainer">
                     <form onSubmit = {this.onSubmit}>
                         <label className = "schedForm">Your email: </label>
                         <input type="text" required /> 
+                        <br/>
                         <br/>
 
                         <label className = "schedForm">Who would you like to meet with (email): </label>
                         <input type="text" required />
                         <br/>
+                        <br/>
 
                         <label className = "schedForm">Input your calendar: </label>
                         <input type="text" required />
                         <br/>
+                        <br/>
 
                         <label className = "schedForm">Upload their calandar: </label>
                         <input type="text" required />
+                        <br/>
                         <br/>
 
                         <label className = "schedForm">Choose a type of location: </label>
@@ -69,9 +76,12 @@ class Welcome extends Component {
                             <option value="gym">Gym</option>
                         </select>
                         <br/>
+                        <br/>
+                        <br />
 
-                        <input type="submit" value="Generate Possible Meetings"  />
+                        <input className="genBtn" type="submit" value="Generate Possible Meetings"  />
                     </form>
+                    </div>
             </div>
     );
   }
