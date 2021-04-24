@@ -25,6 +25,24 @@ router.route('/gyms/:id').get((req, res) => {
     }).pipe(res)
 });
 
+router.route('/libraries/:id').get((req, res) => {
+    const endURL = `https://octo-api.asuc.org/libraries/range?${req.params.id}`;
+    request.get(endURL, {
+        'auth': {
+            'bearer': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTk0NzkwOTgsInR5cGUiOiJhY2Nlc3MiLCJ1aWQiOiJ5UFZNU3RtbFRkYklHQ0hrZWF2cG93VkdMSmcyIn0.3PEwlwCVscRpIelwtoIAgXjInoRulF6JG5ldO2yHHqc'
+        }
+    }).pipe(res)
+});
+
+router.route('/dining/:id').get((req, res) => {
+    const endURL = `https://octo-api.asuc.org/dining/range?${req.params.id}`;
+    request.get(endURL, {
+        'auth': {
+            'bearer': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTk0NzkwOTgsInR5cGUiOiJhY2Nlc3MiLCJ1aWQiOiJ5UFZNU3RtbFRkYklHQ0hrZWF2cG93VkdMSmcyIn0.3PEwlwCVscRpIelwtoIAgXjInoRulF6JG5ldO2yHHqc'
+        }
+    }).pipe(res)
+});
+
 router.route('/map/:pair1/:pair2/:pair3').get((req, res) => {
     request.post({
         headers: { "content-type": "application/json" },
@@ -39,6 +57,8 @@ router.route('/map/:pair1/:pair2/:pair3').get((req, res) => {
         console.long(response);
     }).pipe(res)
 });
+
+
 
 router.route('/:id').get((req, res) => {
     User.findById(req.params.id)
