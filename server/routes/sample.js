@@ -1,8 +1,6 @@
 const router = require('express').Router();
 let User = require('../models/sample.model');
 var request = require('request');
-var url = require('url');
-const { nextTick } = require('process');
 
 router.route('/').get((req, res) => {
     User.find()
@@ -24,6 +22,21 @@ router.route('/gyms/:id').get((req, res) => {
         'auth': {
             'bearer': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTk0NzkwOTgsInR5cGUiOiJhY2Nlc3MiLCJ1aWQiOiJ5UFZNU3RtbFRkYklHQ0hrZWF2cG93VkdMSmcyIn0.3PEwlwCVscRpIelwtoIAgXjInoRulF6JG5ldO2yHHqc'
         }
+    }).pipe(res)
+});
+
+router.route('/map/:pair1/:pair2/:pair3').get((req, res) => {
+    request.post({
+        headers: { "content-type": "application/json" },
+        url: 'http://www.mapquestapi.com/directions/v2/routematrix?key=KawLzVJldGNrlc2dbxE6tOLUUUjRKJA6',
+        body: JSON.stringify({
+            "locations": [
+                req.params.pair1,
+                req.params.pair2,
+                req.params.pair3
+            ]})
+    }, function(error, response, body) {
+        console.long(response);
     }).pipe(res)
 });
 

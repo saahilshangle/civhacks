@@ -1,6 +1,5 @@
 import React from 'react';
 import './../App.css';
-var url = require('url');
 
 export default class Home extends React.Component {
 
