@@ -2,6 +2,7 @@ const router = require('express').Router();
 let User = require('../models/sample.model');
 var request = require('request');
 var url = require('url');
+const { nextTick } = require('process');
 
 router.route('/').get((req, res) => {
     User.find()
@@ -17,19 +18,9 @@ router.route('/add').post((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/gyms').get((req, res) => {
-    const requestUrl = url.parse(url.format({
-        protocol: 'https',
-        hostname: 'octo-api.asuc.org',
-        pathname: '/gyms/range',
-        query: {
-            latitude: req.body.latitude,
-            longitude: req.body.longitude,
-            radius: req.body.radius,
-            unit: req.body.unit
-        }
-    }));
-    request.get(requestUrl, {
+router.route('/gyms/:id').get((req, res) => {
+    const endURL = `https://octo-api.asuc.org/gyms/range?${req.params.id}`;
+    request.get(endURL, {
         'auth': {
             'bearer': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTk0NzkwOTgsInR5cGUiOiJhY2Nlc3MiLCJ1aWQiOiJ5UFZNU3RtbFRkYklHQ0hrZWF2cG93VkdMSmcyIn0.3PEwlwCVscRpIelwtoIAgXjInoRulF6JG5ldO2yHHqc'
         }
