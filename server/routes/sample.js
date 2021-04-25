@@ -1,6 +1,7 @@
 const router = require('express').Router();
 let User = require('../models/sample.model');
 var request = require('request');
+const axios = require('axios');
 
 router.route('/').get((req, res) => {
     User.find()
@@ -22,6 +23,7 @@ router.route('/gyms/:id').get((req, res) => {
         'auth': {
             'bearer': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTk0NzkwOTgsInR5cGUiOiJhY2Nlc3MiLCJ1aWQiOiJ5UFZNU3RtbFRkYklHQ0hrZWF2cG93VkdMSmcyIn0.3PEwlwCVscRpIelwtoIAgXjInoRulF6JG5ldO2yHHqc'
         }
+    }, function(error, response, body) {
     }).pipe(res)
 });
 
@@ -54,11 +56,41 @@ router.route('/map/:pair1/:pair2/:pair3').get((req, res) => {
                 req.params.pair3
             ]})
     }, function(error, response, body) {
-        console.long(response);
+        console.log(response);
     }).pipe(res)
 });
 
+router.route('/calculate').post((req, res) => {
+    const availTimes = req.body.availTimes;
+    const person1 = req.body.person1;
+    const person2 = req.body.person2;
+    const locType = req.body.locType;
+    //const availCoordComb = req.body.availCoordComb;
+    
+    // var possSpotsGeneral = axios.get('http://localhost:5000/sample/gyms/latitude=37.878968&longitude=-122.264619&radius=5&unit=mi')
+    //     .then(function (response) {
+    //         console.log(response);
+    //         possSpotsGeneral = response.JSON;
+            
+    //     })
+    //     .catch(function (error) {
+    //         console.log(error);
+    //     })
+    
+    
+    // var possSpotsGeneral = request.get('http://localhost:5000/sample/gyms/latitude=37.878968&longitude=-122.264619&radius=5&unit=mi', function(err, response, body) {
+    //     if (!err) {
+    //         possSpotsGeneral = body.response;
+    //     }
+    // })
 
+    res.send({
+        person1: person1,
+        person2: person2,
+        locType: locType
+    });
+
+});
 
 router.route('/:id').get((req, res) => {
     User.findById(req.params.id)
