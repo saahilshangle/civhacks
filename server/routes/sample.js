@@ -1,8 +1,7 @@
 const router = require('express').Router();
 let User = require('../models/sample.model');
 var request = require('request');
-const axios = require('axios');
-const fetch = require('node-fetch');
+const http = require("http");
 
 router.route('/').get((req, res) => {
     User.find()
@@ -46,41 +45,54 @@ router.route('/dining/:id').get((req, res) => {
     }).pipe(res)
 });
 
-router.route('/map/:pair1/:pair2/:pair3').get((req, res) => {
-    request.post({
-        headers: { "content-type": "application/json" },
-        url: 'http://www.mapquestapi.com/directions/v2/routematrix?key=KawLzVJldGNrlc2dbxE6tOLUUUjRKJA6',
-        body: JSON.stringify({
-            "locations": [
-                req.params.pair1,
-                req.params.pair2,
-                req.params.pair3
-            ]})
-    }, function(error, response, body) {
-        console.log(response);
-    }).pipe(res)
-});
+// router.route('/map/:pair1/:pair2/:pair3').get((req, res) => {
+//     request.post({
+//         headers: { "content-type": "application/json" },
+//         url: 'http://www.mapquestapi.com/directions/v2/routematrix?key=KawLzVJldGNrlc2dbxE6tOLUUUjRKJA6',
+//         body: JSON.stringify({
+//             "locations": [
+//                 req.params.pair1,
+//                 req.params.pair2,
+//                 req.params.pair3
+//             ]})
+//     }, function(error, response, body) {
+//         console.log(response);
+//     }).pipe(res)
+// });
 
-const sleep = (milliseconds) => {
-    return new Promise(resolve => setTimeout(resolve, milliseconds))
-}
+function RouteMatrix(pair1, pair2, pair3) {
+    const options = {
+        "method": "POST",
+        "hostname": "www.mapquestapi.com",
+        "port": null,
+        "path": "/directions/v2/routematrix?key=KawLzVJldGNrlc2dbxE6tOLUUUjRKJA6",
+        "headers": {
+            "cookie": "JSESSIONID=6C68533A150FA80FEAD175EEB9EE9884",
+            "Content-Type": "application/json",
+        },
+        "body": {
+            "allToAll": false,
+            "manyToOne": true
+        }
+    };
+    
+    const req = http.request(options, function (res) {
+    const chunks = [];
 
-async function asyncFunc() {
-    var possSpots = [];
-    let promise = new Promise(function(resolve, reject) {
-        request.get('http://localhost:5000/sample/gyms/latitude=37.878968&longitude=-122.264619&radius=5&unit=mi', (err, response, body) => {
-            if (err) reject(err);
-            curTemp = JSON.parse(body);
-            var keys = Object.keys( curTemp );
-            for (var i = 0,length = keys.length; i < length; i++) {
-                possSpots.push([curTemp[ keys[ i ] ].longitude, curTemp[keys[i]].latitude])
-                //console.log(possSpots)
-            }
-            resolve(possSpots);
-        })
-    })
-    await promise;
-    return promise;
+    res.on("data", function (chunk) {
+        chunks.push(chunk);
+    });
+
+    res.on("end", function () {
+        const body = Buffer.concat(chunks);
+        //console.log(body.toString());
+    });
+    });
+
+    req.write(JSON.stringify({locations: [pair1, pair2, pair3]}));
+    let result = req.write(JSON.stringify({locations: [pair1, pair2, pair3]}));
+    req.end();
+    return result
 }
 
 router.route('/calculate').post( (req, res) => {
@@ -91,45 +103,14 @@ router.route('/calculate').post( (req, res) => {
     var possSpots;
     var meetingCoord;
     var meetingTime;
+    
 
-    // const availCoordComb = request.get('http://localhost:5000/sample/calendar')
-    // 
-    // function calcBest(availCoordComb, possSpots) {
-    //     for (var i = 0, length = availCoordComb.length; i < length; i++) {
-    //         for (var j = 0, lengthTwo = possSpots.length; j < lengthTwo; j++) {
-    //             
-    //         }
-    //     }
-    // }
-    const options = {
-        'bearer' : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTk0NzkwOTgsInR5cGUiOiJhY2Nlc3MiLCJ1aWQiOiJ5UFZNU3RtbFRkYklHQ0hrZWF2cG93VkdMSmcyIn0.3PEwlwCVscRpIelwtoIAgXjInoRulF6JG5ldO2yHHqc'
-    }
-    const apiURL = `https://octo-api.asuc.org/gyms`;
-    const json = fetch(apiURL, options);
-    //const json = response.json();
-    console.log(json);
-    possSpots = json;
-    // const json = theResponse.json();
-    // console.log(json)
-    //res.json(json);
 
-    // var possSpots = asyncFunc();
-    // console.log(possSpots.then())
-    // res.send({
-    //     possSpots: possSpots
-    // });
-    // request.get('http://localhost:5000/sample/gyms/latitude=37.878968&longitude=-122.264619&radius=5&unit=mi', function(err, response, body) {
-    //     if (!err && response.statusCode == 200) {
-    //         curTemp = JSON.parse(body);
-    //         var keys = Object.keys( curTemp );
-    //         for( var i = 0,length = keys.length; i < length; i++ ) {
-    //             possSpots.push([curTemp[ keys[ i ] ].longitude, curTemp[keys[i]].latitude])
-    //             console.log(possSpots)
-    //         }
-    //     }
-    // })
-    // sleep(1000);
-    // res.send(possSpots)
+    let meetingPt = "37.878968,-122.264619" // UC Berkeley
+    let personA = "33.6405,-117.8443" // UC Irvine
+    let personB = "37.4275,-122.1697" // Stanford
+    let sumDistance = RouteMatrix(meetingPt, personA, personB)
+    console.log(sumDistance);
 
     res.send({
         person1: person1,
@@ -140,27 +121,27 @@ router.route('/calculate').post( (req, res) => {
     });
 });
 
-router.route('/:id').get((req, res) => {
-    User.findById(req.params.id)
-        .then(users => res.json(users))
-        .catch(err => res.status(400).json('Error: ' + err));
-});
+// router.route('/:id').get((req, res) => {
+//     User.findById(req.params.id)
+//         .then(users => res.json(users))
+//         .catch(err => res.status(400).json('Error: ' + err));
+// });
 
-router.route('/:id').delete((req, res) => {
-    User.findByIdAndDelete(req.params.id)
-        .then(users => res.json('User deleted.'))
-        .catch(err => res.status(400).json('Error: ' + err));
-});
+// router.route('/:id').delete((req, res) => {
+//     User.findByIdAndDelete(req.params.id)
+//         .then(users => res.json('User deleted.'))
+//         .catch(err => res.status(400).json('Error: ' + err));
+// });
 
-router.route('/update/:id').post((req, res) => {
-    User.findbyId(req.params.id)
-        .then(users => {
-            users.username = req.body.username;
-            users.save()
-                .then(() => res.json('Exercise updated!'))
-                .catch(err => res.status(400).json('Error: ' + err));
-        })
-        .catch(err => res.status(400).json('Error: ' + err));
-});
+// router.route('/update/:id').post((req, res) => {
+//     User.findbyId(req.params.id)
+//         .then(users => {
+//             users.username = req.body.username;
+//             users.save()
+//                 .then(() => res.json('Exercise updated!'))
+//                 .catch(err => res.status(400).json('Error: ' + err));
+//         })
+//         .catch(err => res.status(400).json('Error: ' + err));
+// });
 
 module.exports = router;
