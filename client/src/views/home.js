@@ -20,6 +20,25 @@ class Welcome extends Component {
         this.onSearch = this.onSearch.bind(this);
     }
 
+    async componentDidMount() {
+        const options = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                person1: this.state.email1,
+                person2: this.state.email2,
+                locType: this.state.typeOfLocation,
+                meetingDate: this.state.dayToMeet
+            })
+        };
+        let apiURL = 'http://localhost:5000/sample/calculate'
+        const response = await fetch(apiURL, options);
+        //const json = await response.json();
+        const text = await response.text()
+        //this.setState({ofInterest: `(${text})`})
+        console.log(`(${text})`)
+    }
+
     onChangeEmail1(e) {
         this.setState({
             email1: e.target.value
