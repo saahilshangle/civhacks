@@ -15,27 +15,14 @@ router.route('/add').post((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/:id').get((req, res) => {
-    User.findById(req.params.id)
-        .then(users => res.json(users))
-        .catch(err => res.status(400).json('Error: ' + err));
-});
+// router.route('/:id').get((req, res) => {
+//     User.findById(req.params.id)
+//         .then(users => res.json(users))
+//         .catch(err => res.status(400).json('Error: ' + err));
+// });
 
-router.route('/:id').delete((req, res) => {
-    User.findByIdAndDelete(req.params.id)
-        .then(users => res.json('User deleted.'))
-        .catch(err => res.status(400).json('Error: ' + err));
-});
-
-router.route('/update/:id').post((req, res) => {
-    User.findbyId(req.params.id)
-        .then(users => {
-            users.username = req.body.username;
-            users.save()
-                .then(() => res.json('Exercise updated!'))
-                .catch(err => res.status(400).json('Error: ' + err));
-        })
-        .catch(err => res.status(400).json('Error: ' + err));
+router.route('/getInfo').get((req, res) => {
+    res.send("37.878968,-122.264619")
 });
 
 function RouteMatrix(pair1, pair2, pair3) {
