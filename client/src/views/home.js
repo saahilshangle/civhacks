@@ -59,13 +59,18 @@ class Welcome extends Component {
                         <br/>
                         <br/>
 
-                        <label className = "schedForm">Input your calendar: </label>
+                        {/* <label className = "schedForm">Input your calendar: </label>
                         <input type="text" required />
                         <br/>
                         <br/>
 
                         <label className = "schedForm">Upload their calandar: </label>
                         <input type="text" required />
+                        <br/>
+                        <br/> */}
+
+                        <label className = "schedForm">Day to meet: </label>
+                        <input type="date" required />
                         <br/>
                         <br/>
 
