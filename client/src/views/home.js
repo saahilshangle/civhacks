@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import swal from 'sweetalert';
 
 class Welcome extends Component {
     constructor(props) {
@@ -45,25 +46,37 @@ class Welcome extends Component {
 
     onSubmit(e) {
         e.preventDefault();
-        // const options = {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({
-        //         person1: this.state.email1,
-        //         person2: this.state.email2,
-        //         locType: this.state.typeOfLocation,
-        //         meetingDate: this.state.dayToMeet
-        //     })
-        // };
-        
-        // let apiURL = 'http://localhost:5000/sample/calculate'
-        // fetch(apiURL, options
-        //     .then(res => res.text())
-        //     .then(res => console.log(res))
 
         this.setState({
-            output: `${e.target[0].value} will meet ${e.target[1].value} on ${e.target[2].value} at 37.878968,-122.264619`
+            output: `${e.target[0].value} can meet ${e.target[1].value} on ${e.target[2].value} at The Bancroft Library (37.8723,-122.2589)`
         });
+
+        // Modal Dialogs
+        swal("Possible meeting found!", `You can meet with ${e.target[1].value} on ${e.target[2].value} at The Bancroft Library @3pm`,{
+            buttons: {
+              cancel: "Cancel",
+              redo: {
+                text: "Eh, try another possibility",
+                value: "redo",
+              },
+              accept: true,
+            },
+          })
+          .then((value) => {
+            switch (value) {
+           
+              case "accept":
+                swal("Meeting has been added to your calendar!", "", "success");
+                break;
+           
+              case "redo":
+                swal("Sorry!", "No other meeting times work for all parties involved.", "error");
+                break;
+           
+              default:
+                swal("Meeting has been scrapped.");
+            }
+          });
     }
 
     onSearch(e) {
@@ -138,8 +151,12 @@ class Welcome extends Component {
 
                         <input className="genBtn" type="submit" value="Generate Possible Meetings"  />
                     </form>
-                    <p>{this.state.output}</p>
+                    <br /><br />
                 </div>
+
+                {/* <div className = "output">
+                    {this.state.output}
+                </div> */}
             </div>
     );
   }

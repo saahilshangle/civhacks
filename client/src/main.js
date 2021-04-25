@@ -4,7 +4,7 @@ import Welcome from "./views/home";
 import Stuff from "./views/about";
 import Contact from "./views/contact";
 // import NavBar from './views/NavBar';
-import croppedLogo from './img/croppedLogo.PNG'
+import croppedLogo from './img/croppedLogo.PNG';
  
 class Main extends Component {
   render() {
