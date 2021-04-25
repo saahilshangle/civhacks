@@ -12,7 +12,8 @@ export default class Home extends React.Component {
             longitude: -122.264619,
             radius: 5,
             unit: 'mi',
-            gyms: []
+            gyms: [],
+            poss: []
         }
 
         this.onChangeUsername = this.onChangeUsername.bind(this);
@@ -23,6 +24,7 @@ export default class Home extends React.Component {
         this.onSubmit = this.onSubmit.bind(this);
         this.onSubmitTwo = this.onSubmitTwo.bind(this);
         this.onSearch = this.onSearch.bind(this);
+        this.onSubmitThree = this.onSubmitThree(this);
     }
 
     onChangeUsername(e) {
@@ -75,6 +77,14 @@ export default class Home extends React.Component {
         fetch(serverUrl)
             .then(res => res.text())
             .then(res => this.setState({ gyms: res }))
+    }
+
+    onSubmitThree(e) {
+        const serverUrl = `http://localhost:5000/sample/calculate`;
+        const json = fetch(serverUrl);
+        //const json = response.json();
+        console.log(json);
+        this.setState({ gyms: json });
     }
 
     onSearch(e) {
@@ -132,6 +142,11 @@ export default class Home extends React.Component {
                     <input type="submit" value="Submit Search"  />
                 </form>
                 <p>{this.state.gyms}</p>
+                <h3>Possible Meetup Locations</h3>
+                <form onSubmit = {this.onSubmitThree}>
+                    <input type="submit" value="Search Possible" />
+                </form>
+                <p>{this.state.poss}</p>
             </div>
         );
     }

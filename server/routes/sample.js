@@ -2,6 +2,7 @@ const router = require('express').Router();
 let User = require('../models/sample.model');
 var request = require('request');
 const axios = require('axios');
+const fetch = require('node-fetch');
 
 router.route('/').get((req, res) => {
     User.find()
@@ -60,36 +61,83 @@ router.route('/map/:pair1/:pair2/:pair3').get((req, res) => {
     }).pipe(res)
 });
 
-router.route('/calculate').post((req, res) => {
-    const availTimes = req.body.availTimes;
+const sleep = (milliseconds) => {
+    return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
+
+async function asyncFunc() {
+    var possSpots = [];
+    let promise = new Promise(function(resolve, reject) {
+        request.get('http://localhost:5000/sample/gyms/latitude=37.878968&longitude=-122.264619&radius=5&unit=mi', (err, response, body) => {
+            if (err) reject(err);
+            curTemp = JSON.parse(body);
+            var keys = Object.keys( curTemp );
+            for (var i = 0,length = keys.length; i < length; i++) {
+                possSpots.push([curTemp[ keys[ i ] ].longitude, curTemp[keys[i]].latitude])
+                //console.log(possSpots)
+            }
+            resolve(possSpots);
+        })
+    })
+    await promise;
+    return promise;
+}
+
+router.route('/calculate').post( (req, res) => {
     const person1 = req.body.person1;
     const person2 = req.body.person2;
     const locType = req.body.locType;
-    //const availCoordComb = req.body.availCoordComb;
-    
-    // var possSpotsGeneral = axios.get('http://localhost:5000/sample/gyms/latitude=37.878968&longitude=-122.264619&radius=5&unit=mi')
-    //     .then(function (response) {
-    //         console.log(response);
-    //         possSpotsGeneral = response.JSON;
-            
-    //     })
-    //     .catch(function (error) {
-    //         console.log(error);
-    //     })
-    
-    
-    // var possSpotsGeneral = request.get('http://localhost:5000/sample/gyms/latitude=37.878968&longitude=-122.264619&radius=5&unit=mi', function(err, response, body) {
-    //     if (!err) {
-    //         possSpotsGeneral = body.response;
+    const meetingDate = req.body.meetingDate;
+    var possSpots;
+    var meetingCoord;
+    var meetingTime;
+
+    // const availCoordComb = request.get('http://localhost:5000/sample/calendar')
+    // 
+    // function calcBest(availCoordComb, possSpots) {
+    //     for (var i = 0, length = availCoordComb.length; i < length; i++) {
+    //         for (var j = 0, lengthTwo = possSpots.length; j < lengthTwo; j++) {
+    //             
+    //         }
+    //     }
+    // }
+    const options = {
+        'bearer' : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTk0NzkwOTgsInR5cGUiOiJhY2Nlc3MiLCJ1aWQiOiJ5UFZNU3RtbFRkYklHQ0hrZWF2cG93VkdMSmcyIn0.3PEwlwCVscRpIelwtoIAgXjInoRulF6JG5ldO2yHHqc'
+    }
+    const apiURL = `https://octo-api.asuc.org/gyms`;
+    const json = fetch(apiURL, options);
+    //const json = response.json();
+    console.log(json);
+    possSpots = json;
+    // const json = theResponse.json();
+    // console.log(json)
+    //res.json(json);
+
+    // var possSpots = asyncFunc();
+    // console.log(possSpots.then())
+    // res.send({
+    //     possSpots: possSpots
+    // });
+    // request.get('http://localhost:5000/sample/gyms/latitude=37.878968&longitude=-122.264619&radius=5&unit=mi', function(err, response, body) {
+    //     if (!err && response.statusCode == 200) {
+    //         curTemp = JSON.parse(body);
+    //         var keys = Object.keys( curTemp );
+    //         for( var i = 0,length = keys.length; i < length; i++ ) {
+    //             possSpots.push([curTemp[ keys[ i ] ].longitude, curTemp[keys[i]].latitude])
+    //             console.log(possSpots)
+    //         }
     //     }
     // })
+    // sleep(1000);
+    // res.send(possSpots)
 
     res.send({
         person1: person1,
         person2: person2,
-        locType: locType
+        locType: locType//,
+        // meetingCoord: meetingCoord,
+        // meetingTime: meetingTime
     });
-
 });
 
 router.route('/:id').get((req, res) => {
