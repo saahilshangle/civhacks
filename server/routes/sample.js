@@ -1,5 +1,7 @@
 const router = require('express').Router();
 let User = require('../models/sample.model');
+const http = require('http');
+const request = require('request');
 
 router.route('/').get((req, res) => {
     User.find()
@@ -15,48 +17,26 @@ router.route('/add').post((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
-// router.route('/:id').get((req, res) => {
-//     User.findById(req.params.id)
-//         .then(users => res.json(users))
-//         .catch(err => res.status(400).json('Error: ' + err));
-// });
-
 function RouteMatrix(pair1, pair2, pair3) {
-    const options = {
-        "method": "POST",
-        "hostname": "www.mapquestapi.com",
-        "port": null,
-        "path": "/directions/v2/routematrix?key=KawLzVJldGNrlc2dbxE6tOLUUUjRKJA6",
-        "headers": {
-            "cookie": "JSESSIONID=6C68533A150FA80FEAD175EEB9EE9884",
-            "Content-Type": "application/json",
-        },
-        "body": {
-            "allToAll": false,
-            "manyToOne": true
-        }
-    };
-    
-    const req = http.request(options, function (res) {
-    const chunks = [];
-
-    res.on("data", function (chunk) {
-        chunks.push(chunk);
-    });
-
-    res.on("end", function () {
-        const body = Buffer.concat(chunks);
-        //console.log(body.toString());
-    });
-    });
-
-    req.write(JSON.stringify({locations: [pair1, pair2, pair3]}));
-    let result = req.write(JSON.stringify({locations: [pair1, pair2, pair3]}));
-    req.end();
-    return result
+    let p = new Promise(function(resolve, reject) {
+    request.post({
+        headers: { "content-type": "application/json" },
+        url: 'http://www.mapquestapi.com/directions/v2/routematrix?key=KawLzVJldGNrlc2dbxE6tOLUUUjRKJA6',
+        body: JSON.stringify({
+            "locations": [
+                pair1,
+                pair2,
+                pair3
+            ]})
+    }, function(error, response, body) {
+        //console.log(body);
+        resolve(body);
+    })
+    })
+    return p
 }
 
-router.route('/calculate').post( (req, res) => {
+router.route('/calculate').post( async (req, res) => {
     const person1 = req.body.person1;
     const person2 = req.body.person2;
     const locType = req.body.locType;
@@ -65,19 +45,16 @@ router.route('/calculate').post( (req, res) => {
     var meetingCoord;
     var meetingTime;
     
-    let meetingPt = "37.878968,-122.264619" // UC Berkeley
-    let personA = "33.6405,-117.8443" // UC Irvine
-    let personB = "37.4275,-122.1697" // Stanford
-    let sumDistance = RouteMatrix(meetingPt, personA, personB)
-    console.log(sumDistance);
+    let meetingPt = "37.86774912247788, -122.25777861935839" // Feng Cha
+    let personA = "37.8691,-122.2549" // Caffe Strada
+    let personB = "37.8653,-122.2583" // Romeos Coffee
+    
+    let sumDistance = await RouteMatrix(meetingPt, personA, personB)
+    let sumTemp = JSON.parse(sumDistance)['distance'];
+    let sum = sumTemp[1] + sumTemp[2]
+    console.log(`Minimized Total Travel: ${sum} miles!`)
 
-    res.send({
-        person1: person1,
-        person2: person2,
-        locType: locType//,
-        // meetingCoord: meetingCoord,
-        // meetingTime: meetingTime
-    });
+    res.send(meetingPt);
 });
 
 module.exports = router;
