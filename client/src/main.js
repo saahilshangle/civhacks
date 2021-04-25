@@ -13,7 +13,7 @@ class Main extends Component {
             {/* <NavBar /> */}
             <div>
                 <div className = "title">
-                    <img id = "titleImg" src={croppedLogo} />
+                    <img id = "titleImg" src={croppedLogo} alt = "Meet Me Here"/>
                 </div>
                 <ul className = "header">
                     <li><NavLink exact to="/">Home</NavLink></li>

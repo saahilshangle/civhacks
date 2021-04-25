@@ -20,17 +20,41 @@ class Welcome extends Component {
     }
 
     onSubmit(e) {
-        e.preventDefault();
-        const result = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: this.state.username })
-        };
+        // e.preventDefault();
+        // const result = {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify({ username: this.state.username })
+        // };
         
-        let apiURL = 'http://localhost:5000/sample/add'
-        fetch(apiURL, result)
-            .then(res => res.text())
-            .then(res => console.log(res))
+        // let apiURL = 'http://localhost:5000/sample/add'
+        // fetch(apiURL, result)
+        //     .then(res => res.text())
+        //     .then(res => console.log(res))
+
+
+
+        // var usrEmail = document.getElementsByTagName("input")[0].value;
+        // var friendEmail = document.getElementsByTagName("input")[1].value;
+        // var day = document.getElementsByTagName("input")[2].value;
+        // var location = document.getElementsByTagName("input")[3].value;
+
+        // console.log("email: " + usrEmail + "   friendEmail: " + friendEmail + "    day: " + day + "    location: " + location);
+
+
+        e.preventDefault();
+        var email1 = e.target[0].value;
+        var email2 = e.target[1].value;
+        var date = e.target[2].value
+        var location = e.target[3].value;
+
+        console.log("email1: " + email1);
+        console.log("email2: " + email2);
+        console.log("date: " + date);
+        console.log("location: " + location);
+
+        //console.log(e.target[0].value)
+        console.log("hey");
     }
 
     onSearch(e) {
@@ -86,7 +110,7 @@ class Welcome extends Component {
 
                         <input className="genBtn" type="submit" value="Generate Possible Meetings"  />
                     </form>
-                    </div>
+                </div>
             </div>
     );
   }

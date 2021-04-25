@@ -19,5 +19,5 @@ class Stuff extends Component {
     );
   }
 }
- 
+
 export default Stuff;
