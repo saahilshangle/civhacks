@@ -21,10 +21,6 @@ router.route('/add').post((req, res) => {
 //         .catch(err => res.status(400).json('Error: ' + err));
 // });
 
-router.route('/getInfo').get((req, res) => {
-    res.send("37.878968,-122.264619")
-});
-
 function RouteMatrix(pair1, pair2, pair3) {
     const options = {
         "method": "POST",

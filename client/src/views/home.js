@@ -8,11 +8,13 @@ class Welcome extends Component {
             email2: 'mary@example.com',
             dayToMeet: '2021-04-25',
             typeOfLocation: '',
-            output: '',
-            coordinates: ''
+            output: ''
         }
 
         this.onChangeEmail1 = this.onChangeEmail1.bind(this);
+        this.onChangeEmail2 = this.onChangeEmail2.bind(this);
+        this.onChangeDayToMeet = this.onChangeDayToMeet.bind(this);
+        this.onChangeTypeOfLocation = this.onChangeTypeOfLocation.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.onSearch = this.onSearch.bind(this);
     }
@@ -23,31 +25,44 @@ class Welcome extends Component {
         });
     }
 
+    onChangeEmail2(e) {
+        this.setState({
+            email2: e.target.value
+        });
+    }
+
+    onChangeDayToMeet(e) {
+        this.setState({
+            dayToMeet: e.target.value
+        });
+    }
+
+    onChangeTypeOfLocation(e) {
+        this.setState({
+            typeOfLocation: e.target.value
+        });
+    }
+
     onSubmit(e) {
-        // e.preventDefault();
-        // const result = {
+        e.preventDefault();
+        // const options = {
         //     method: 'POST',
         //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({ username: this.state.username })
+        //     body: JSON.stringify({
+        //         person1: this.state.email1,
+        //         person2: this.state.email2,
+        //         locType: this.state.typeOfLocation,
+        //         meetingDate: this.state.dayToMeet
+        //     })
         // };
         
-        // let apiURL = 'http://localhost:5000/sample/add'
-        // fetch(apiURL, result)
+        // let apiURL = 'http://localhost:5000/sample/calculate'
+        // fetch(apiURL, options
         //     .then(res => res.text())
         //     .then(res => console.log(res))
 
-        e.preventDefault();
-        var email1 = e.target[0].value;
-        var email2 = e.target[1].value;
-        var date = e.target[2].value
-
-        let apiURL = 'http://localhost:5000/sample/getInfo'
-        fetch(apiURL)
-            .then(res => res.text())
-            .then(res => this.setState({ coordinates: res }))
-
         this.setState({
-            output: `${email1} will meet ${email2} on ${date} at 37.878968,-122.264619`
+            output: `${e.target[0].value} will meet ${e.target[1].value} on ${e.target[2].value} at 37.878968,-122.264619`
         });
     }
 
@@ -85,7 +100,11 @@ class Welcome extends Component {
                         <br/>
 
                         <label className = "schedForm">Who would you like to meet with (email): </label>
-                        <input type="text" required value={this.state.email2}/>
+                        <input type="text" 
+                                required 
+                                value={this.state.email2}
+                                onChange={this.onChangeEmail2}
+                        />
                         <br/>
                         <br/>
 
@@ -100,15 +119,18 @@ class Welcome extends Component {
                         <br/> */}
 
                         <label className = "schedForm">Day to meet: </label>
-                        <input type="date" required value={this.state.dayToMeet}/>
+                        <input type="date" required 
+                                value={this.state.dayToMeet}
+                                onChange={this.onChangeDayToMeet}
+                        />
                         <br/>
                         <br/>
 
                         <label className = "schedForm">Choose a type of location: </label>
                         <select id="locations">
-                            <option value="library">Library</option>
-                            <option value="diningHall">Dining Hall</option>
-                            <option value="gym">Gym</option>
+                            <option value="library" onChange={this.onChangeTypeOfLocation}>Library</option>
+                            <option value="diningHall" onChange={this.onChangeTypeOfLocation}>Dining Hall</option>
+                            <option value="gym" onChange={this.onChangeTypeOfLocation}>Gym</option>
                         </select>
                         <br/>
                         <br/>
