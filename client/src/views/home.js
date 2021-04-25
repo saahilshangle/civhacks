@@ -5,8 +5,8 @@ class Welcome extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            email1: 'Cole',
-            email2: 'Brian',
+            email1: 'cbheinbaugh@gmail.com',
+            email2: 'briananderson346@gmail.com',
             dayToMeet: '2021-04-25',
             typeOfLocation: '',
             output: ''
@@ -103,7 +103,7 @@ class Welcome extends Component {
                 <br />
                 <div className = "formContainer">
                     <form onSubmit = {this.onSubmit}>
-                        <label className = "schedForm">Your Name: </label>
+                        <label className = "schedForm">Your Email: </label>
                         <input type="text"
                                 required 
                                 value={this.state.email1}
@@ -112,8 +112,8 @@ class Welcome extends Component {
                         <br/>
                         <br/>
 
-                        <label className = "schedForm">Peer's Name: </label>
-                        <input type="text" 
+                        <label className = "schedForm">Peer's Email: </label>
+                        <input type="text"
                                 required 
                                 value={this.state.email2}
                                 onChange={this.onChangeEmail2}
